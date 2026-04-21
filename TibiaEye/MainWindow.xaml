@@ -1,0 +1,241 @@
+<Window
+    x:Class="TibiaEye.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Title="TibiaEye"
+    Height="620"
+    Width="480"
+    MinHeight="560"
+    MinWidth="440"
+    Background="{DynamicResource MaterialDesignPaper}"
+    Foreground="{DynamicResource MaterialDesignBody}"
+    FontFamily="{materialDesign:MaterialDesignFont}"
+    TextElement.FontSize="14"
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <Style x:Key="SectionHeader" TargetType="TextBlock"
+               BasedOn="{StaticResource MaterialDesignSubtitle1TextBlock}">
+            <Setter Property="Margin"        Value="0,12,0,4"/>
+            <Setter Property="Foreground"    Value="{DynamicResource PrimaryHueMidBrush}"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+            <materialDesign:PackIcon Kind="Eye" Width="32" Height="32"
+                                     Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                     VerticalAlignment="Center"/>
+            <TextBlock Text="TibiaEye"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center"/>
+            <TextBlock x:Name="StatusDot" Text="&#x25CF;" FontSize="10"
+                       Margin="12,0,0,4"
+                       VerticalAlignment="Bottom"
+                       Foreground="Gray"/>
+            <TextBlock x:Name="StatusLabel" Text="Disconnected"
+                       Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                       Margin="4,0,0,4"
+                       VerticalAlignment="Bottom"/>
+        </StackPanel>
+
+        <!-- SCROLLABLE BODY -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- HP Section -->
+                <TextBlock Text="&#x2694;&#xFE0F;  Health" Style="{StaticResource SectionHeader}"/>
+                <materialDesign:Card Padding="12" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="Heal when HP below"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   x:Name="HpThresholdLabel" Text="70 %"
+                                   Width="44" TextAlignment="Right"/>
+                        <Slider Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                x:Name="HpSlider"
+                                Minimum="1" Maximum="99" Value="70"
+                                TickFrequency="5" IsSnapToTickEnabled="True"
+                                materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="True"
+                                ValueChanged="HpSlider_ValueChanged"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Mana Section -->
+                <TextBlock Text="&#x1F4A7;  Mana" Style="{StaticResource SectionHeader}"/>
+                <materialDesign:Card Padding="12" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="Restore mana below"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   x:Name="ManaThresholdLabel" Text="50 %"
+                                   Width="44" TextAlignment="Right"/>
+                        <Slider Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                x:Name="ManaSlider"
+                                Minimum="1" Maximum="99" Value="50"
+                                TickFrequency="5" IsSnapToTickEnabled="True"
+                                materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="True"
+                                ValueChanged="ManaSlider_ValueChanged"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Live HP Status -->
+                <TextBlock Text="&#x1F4CA;  Live HP" Style="{StaticResource SectionHeader}"/>
+                <materialDesign:Card Padding="12" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="HP"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   x:Name="LiveHpLabel" Text="&#x2014;"
+                                   TextAlignment="Right"/>
+                        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                     x:Name="HpProgressBar"
+                                     Height="10" Minimum="0" Maximum="100"
+                                     Foreground="#DB4F4F"
+                                     Margin="0,4,0,0"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Live Mana Status -->
+                <materialDesign:Card Padding="12" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Mana"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   x:Name="LiveManaLabel" Text="&#x2014;"
+                                   TextAlignment="Right"/>
+                        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                     x:Name="ManaProgressBar"
+                                     Height="10" Minimum="0" Maximum="100"
+                                     Foreground="#5350DA"
+                                     Margin="0,4,0,0"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Feature Toggles -->
+                <TextBlock Text="&#x2699;&#xFE0F;  Features" Style="{StaticResource SectionHeader}"/>
+                <materialDesign:Card Padding="12" Margin="0,0,0,8">
+                    <StackPanel>
+                        <CheckBox x:Name="AutoHasteCheck"
+                                  Content="Auto-Haste  (F3)"
+                                  Margin="0,4"
+                                  Checked="Feature_Changed"
+                                  Unchecked="Feature_Changed"/>
+                        <CheckBox x:Name="AutoManaShieldCheck"
+                                  Content="Auto-Mana-Shield / Utamo Vita  (F4)"
+                                  Margin="0,4"
+                                  Checked="Feature_Changed"
+                                  Unchecked="Feature_Changed"/>
+                        <CheckBox x:Name="FoodEaterCheck"
+                                  Content="Food Eater  (F5)"
+                                  Margin="0,4"
+                                  Checked="Feature_Changed"
+                                  Unchecked="Feature_Changed"/>
+                        <CheckBox x:Name="OverlayCheck"
+                                  Content="Show HUD Overlay"
+                                  IsChecked="True"
+                                  Margin="0,4"
+                                  Checked="Overlay_Changed"
+                                  Unchecked="Overlay_Changed"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Action Log -->
+                <TextBlock Text="&#x1F4CB;  Action Log" Style="{StaticResource SectionHeader}"/>
+                <materialDesign:Card Padding="8" Margin="0,0,0,8">
+                    <ListBox x:Name="ActionLog"
+                             Height="80"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             FontSize="11"
+                             Background="Transparent"
+                             BorderThickness="0"/>
+                </materialDesign:Card>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- STATUS BAR -->
+        <Border Grid.Row="2"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                Margin="0,8,0,8" Padding="0,6,0,0">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="InformationOutline"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,4,0"/>
+                <TextBlock x:Name="FooterLabel"
+                           Text="Waiting for Tibia.exe&#x2026;"
+                           Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- START / STOP -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    x:Name="StartButton"
+                    Content="&#x25B6;  START"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    materialDesign:ButtonAssist.CornerRadius="4"
+                    Background="#4CAF50"
+                    Margin="0,0,6,0"
+                    Click="StartButton_Click"/>
+            <Button Grid.Column="1"
+                    x:Name="StopButton"
+                    Content="&#x25A0;  STOP"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    materialDesign:ButtonAssist.CornerRadius="4"
+                    Background="#F44336"
+                    IsEnabled="False"
+                    Margin="6,0,0,0"
+                    Click="StopButton_Click"/>
+        </Grid>
+    </Grid>
+</Window>
